@@ -5,61 +5,56 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val botoncalcular: Button=findViewById(R.id.btnCalcular)
-        botoncalcular.setOnClickListener{realizarCalculo()}
+
+        val botonCalcular:Button = findViewById(R.id.btnCalcular)
+        botonCalcular.setOnClickListener{Calcular()}
 
     }
 
-    private fun realizarCalculo() {
+    private fun Calcular() {
+        val campoNota1: EditText = findViewById(R.id.nota1)
+        val campoNota2: EditText = findViewById(R.id.nota2)
+        val campoNota3: EditText = findViewById(R.id.nota3)
+        val campoTexto: EditText = findViewById(R.id.editnombreTxt)
+        val campoMateria1: EditText = findViewById(R.id.editmateria)
 
-        val campoNombre:EditText=findViewById(R.id.editnombreTxt)
-        val campoMateria:EditText=findViewById(R.id.editmateria)
+        val nota1:Double = campoNota1.text.toString().toDouble()
+        val nota2:Double = campoNota2.text.toString().toDouble()
+        val nota3:Double = campoNota3.text.toString().toDouble()
+        val name:String = campoTexto.text.toString()
+        val subject:String = campoMateria1.text.toString()
 
-        val campoNota1:EditText=findViewById(R.id.nota1)
-        val campoNota2:EditText=findViewById(R.id.nota2)
-        val campoNota3:EditText=findViewById(R.id.nota3)
+        val prom: Double = (nota1 + nota2 + nota3) / 3.0
+        val Formato = String.format("%.2f", prom)
 
+        var message: String? = null
 
-        val nombre:String=campoNombre.text.toString()
-        val materia:String=campoMateria.text.toString()
-        val nota1:Double=campoNota1.text.toString().toDouble()
-        val nota2:Double=campoNota2.text.toString().toDouble()
-        val nota3:Double=campoNota3.text.toString().toDouble()
-
-
-        val prom:Double=(nota1+nota2+nota3)/3
-        var messagepro: String? = null
-
-        if(prom >= 3.5){
-            messagepro = "Usted ha aprobado"
-        }else{
-            messagepro = "Usted no aprobo"
+        if (prom >= 3.5) {
+            message = "Aprobado"
+        } else {
+            message = "Reprobado"
         }
 
-        val llamar = Intent(this, ActivityMessage::class.java )
-        val conteiner: Bundle = Bundle()
-        conteiner.putString("editnombreTxt", nombre)
-        conteiner.putString("editmateria", materia )
-        conteiner.putDouble("promedio", prom)
-        conteiner.putDouble("nota1", nota1)
-        conteiner.putDouble("nota2", nota2)
-        conteiner.putDouble("nota3", nota3)
-        conteiner.putString("message",messagepro)
+        val intent = Intent(this, ActivityMessage::class.java)
+        val content: Bundle = Bundle()
+        content.putString("Nombre", name)
+        content.putString("Materia", subject)
+        content.putString("Promedio", Formato)
+        content.putDouble("Nota1",nota1)
+        content.putDouble("Nota2",nota2)
+        content.putDouble("Nota3",nota3)
+        content.putString("message",message)
 
-        llamar.putExtras(conteiner)
-        startActivity(llamar)
-
-
-
-
-
-
+        intent.putExtras(content)
+        startActivity(intent)
     }
+
+}
+
 }
